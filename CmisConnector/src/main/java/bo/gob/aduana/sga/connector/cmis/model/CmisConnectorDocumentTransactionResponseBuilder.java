@@ -38,6 +38,6 @@ public class CmisConnectorDocumentTransactionResponseBuilder {
 	}
 
 	public CmisConnectorDocumentTransactionResponse build() {
-		return new CmisConnectorDocumentTransactionResponse(new CmisConnectorDocument(documentContentMD5HashCode, document), exception, result);
+		return new CmisConnectorDocumentTransactionResponse(new CmisConnectorObject(documentContentMD5HashCode, document), exception, result);
 	}
 }

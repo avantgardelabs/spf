@@ -5,8 +5,10 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.chemistry.opencmis.client.api.CmisObject;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Property;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.data.RepositoryCapabilities;
 import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
 
@@ -20,6 +22,12 @@ import bo.gob.aduana.sga.connector.cmis.model.CmisConnectorOperationResult;
  * 
  */
 public interface CmisConnector {
+	/**
+	 * Get the current cmis session
+	 * 
+	 * @return
+	 */
+	public Session getSession();
 
 	/**
 	 * Gets the repository information
@@ -42,6 +50,13 @@ public interface CmisConnector {
 	 * @return Document inside CmisConnectorFileTransactionResponse
 	 */
 	public CmisConnectorDocumentTransactionResponse getDocumentById(String id);
+
+	/**
+	 * Get a CmisObject by ID
+	 * 
+	 * @return CmisObject
+	 */
+	public CmisObject getCmisObjectById(String id);
 
 	/**
 	 * CheckOut the given Document ID to update it and create a new version.

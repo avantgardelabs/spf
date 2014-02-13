@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Property;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -42,9 +41,9 @@ public class CmisConnectorTest extends TestCase {
 		String content = "This is some test content.";
 		CmisConnectorDocumentTransactionResponse response = connector.createDocument(textFileName, content, mimetype, FOLDER_SITIOS_ID);
 		validateSuccessResponse(response);
-		assertTrue(DigestUtils.md5Hex(content).equalsIgnoreCase(response.getCmisConnectorDocument().getHashCode()));
-		testDelete(response.getCmisConnectorDocument().getDocument().getId(), true);
-		validateDocumentDeletion(response.getCmisConnectorDocument().getDocument().getId());
+		assertTrue(DigestUtils.md5Hex(content).equalsIgnoreCase(response.getCmisConnectorObject().getHashCode()));
+		testDelete(response.getCmisConnectorObject().getDocument().getId(), true);
+		validateDocumentDeletion(response.getCmisConnectorObject().getDocument().getId());
 	}
 
 	@Test
@@ -58,9 +57,9 @@ public class CmisConnectorTest extends TestCase {
 	public void testUpdateDocument() {
 		Document oldDoc = getDocumentTest(MAIN_PAGE_FILE_ID);
 		CmisConnectorDocumentTransactionResponse response = connector.checkOutDocument(MAIN_PAGE_FILE_ID);
-		Document pwc = response.getCmisConnectorDocument().getDocument();
+		Document pwc = response.getCmisConnectorObject().getDocument();
 		CmisConnectorDocumentTransactionResponse response2 = connector.checkIn(pwc.getId(), true, pwc.getName(), pwc.getContentStream().getStream(), pwc.getContentStreamMimeType(), "test comment");
-		Document newDoc = response2.getCmisConnectorDocument().getDocument();
+		Document newDoc = response2.getCmisConnectorObject().getDocument();
 		LOGGER.debug("oldDoc version=" + oldDoc.getVersionLabel());
 		LOGGER.debug("newDoc version (after checkin)=" + newDoc.getVersionLabel());
 		assertTrue(newDoc.getVersionLabel() != pwc.getVersionLabel());
@@ -87,18 +86,18 @@ public class CmisConnectorTest extends TestCase {
 	private Document getDocumentTest(String id) {
 		CmisConnectorDocumentTransactionResponse response = connector.getDocumentById(id);
 		validateSuccessResponse(response);
-		return response.getCmisConnectorDocument().getDocument();
+		return response.getCmisConnectorObject().getDocument();
 	}
 
 	private void validateSuccessResponse(CmisConnectorDocumentTransactionResponse response) {
 		assertTrue(response.getResult() == CmisConnectorOperationResult.SUCCESS);
-		assertNotNull(response.getCmisConnectorDocument());
+		assertNotNull(response.getCmisConnectorObject());
 	}
 
 	private void validateDocumentDeletion(String id) {
 		CmisConnectorDocumentTransactionResponse response = connector.getDocumentById(id);
 		assertTrue(response.getResult() == CmisConnectorOperationResult.ERROR);
-		assertNull(response.getCmisConnectorDocument().getDocument());
+		assertNull(response.getCmisConnectorObject().getDocument());
 	}
 
 	private void testDelete(String id, boolean allVersions) {
