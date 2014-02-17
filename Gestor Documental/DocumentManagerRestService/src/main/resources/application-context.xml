@@ -1,0 +1,18 @@
+<?xml  version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder location="classpath:config.properties" />
+
+	<bean id="documentManagerService"
+		class="bo.gob.aduana.sga.connector.cmis.service.impl.DocumentManagerServiceImpl">
+		<constructor-arg index="0" value="${cmis.username}" />
+		<constructor-arg index="1" value="${cmis.password}" />
+		<constructor-arg index="2" value="${cmis.repoId}" />
+		<constructor-arg index="3" value="${cmis.atomPubUrl}" />
+		<property name="cmisIdPrefix" value="${cmis.objects.id.prefix}" />
+	</bean>
+
+</beans>
