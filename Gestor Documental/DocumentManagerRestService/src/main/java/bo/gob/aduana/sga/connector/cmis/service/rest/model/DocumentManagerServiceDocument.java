@@ -9,15 +9,15 @@ import org.apache.chemistry.opencmis.client.api.Property;
 import org.springframework.util.FileCopyUtils;
 
 public class DocumentManagerServiceDocument {
+	private String name;
 	private String cmisId;
+	private String version;
+	private List<String> versionsHistory;
 	private String md5Hash;
 	private byte[] content;
 	private List<Property<?>> properties;
-	private String name;
-	private String version;
-	private List<String> versionsHistory;
 
-	public List<String> format(List<Document> versions) {
+	private List<String> format(List<Document> versions) {
 		List<String> formatedVersions = new ArrayList<String>();
 		for (Document document : versions) {
 			formatedVersions.add(document.getVersionLabel());
