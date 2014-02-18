@@ -17,6 +17,8 @@ import bo.gob.aduana.sga.connector.cmis.CmisConnectorImpl;
 import bo.gob.aduana.sga.connector.cmis.model.CmisConnectorDocumentTransactionResponse;
 import bo.gob.aduana.sga.connector.cmis.model.CmisConnectorOperationResult;
 
+import com.sun.xml.messaging.saaj.util.ByteInputStream;
+
 public class CmisConnectorTest extends TestCase {
 	private static final String FOLDER_SITIOS_ID = "workspace://SpacesStore/4f66b275-8e6e-4040-b4bd-fd206bad2e62";
 	private static final String MAIN_PAGE_FILE_ID = "workspace://SpacesStore/d6f3a279-ce86-4a12-8985-93b71afbb71d";
@@ -37,13 +39,13 @@ public class CmisConnectorTest extends TestCase {
 	public void testCreateDocument() {
 		String textFileName = "test.txt";
 		// folder Sitios
-		String mimetype = "text/plain; charset=UTF-8";
+		String mimetype = "text/plain";
 		String content = "This is some test content.";
-		CmisConnectorDocumentTransactionResponse response = connector.createDocument(textFileName, content, mimetype, FOLDER_SITIOS_ID);
+		CmisConnectorDocumentTransactionResponse response = connector.createDocument(textFileName, new ByteInputStream(content.getBytes(), content.getBytes().length), mimetype, FOLDER_SITIOS_ID);
 		validateSuccessResponse(response);
-		assertTrue(DigestUtils.md5Hex(content).equalsIgnoreCase(response.getCmisConnectorObject().getHashCode()));
-		testDelete(response.getCmisConnectorObject().getDocument().getId(), true);
-		validateDocumentDeletion(response.getCmisConnectorObject().getDocument().getId());
+		assertTrue(DigestUtils.md5Hex(content).equalsIgnoreCase(response.getCmisConnectorDocument().getHashCode()));
+//		testDelete(response.getCmisConnectorDocument().getDocument().getId(), true);
+//		validateDocumentDeletion(response.getCmisConnectorDocument().getDocument().getId());
 	}
 
 	@Test
@@ -57,10 +59,10 @@ public class CmisConnectorTest extends TestCase {
 	public void testUpdateDocument() {
 		Document oldDoc = getDocumentTest(MAIN_PAGE_FILE_ID);
 		CmisConnectorDocumentTransactionResponse response = connector.checkOutDocument(MAIN_PAGE_FILE_ID);
-		Document pwc = response.getCmisConnectorObject().getDocument();
-		CmisConnectorDocumentTransactionResponse response2 = connector.checkIn(pwc.getId(), true, pwc.getName(), pwc.getContentStream().getStream(), pwc.getContentStreamMimeType(), "test comment");
-		Document newDoc = response2.getCmisConnectorObject().getDocument();
-		LOGGER.debug("oldDoc version=" + oldDoc.getVersionLabel());
+		Document pwc = response.getCmisConnectorDocument().getDocument();
+		CmisConnectorDocumentTransactionResponse response2 = connector.checkIn(pwc.getId(), false, pwc.getName(), pwc.getContentStream().getStream(), pwc.getContentStreamMimeType(), "test comment");
+		Document newDoc = response2.getCmisConnectorDocument().getDocument();
+		LOGGER.debug("olddoc, name="+pwc.getName()+", version=" + oldDoc.getVersionLabel());
 		LOGGER.debug("newDoc version (after checkin)=" + newDoc.getVersionLabel());
 		assertTrue(newDoc.getVersionLabel() != pwc.getVersionLabel());
 		testDelete(newDoc.getId(), false);
@@ -86,18 +88,18 @@ public class CmisConnectorTest extends TestCase {
 	private Document getDocumentTest(String id) {
 		CmisConnectorDocumentTransactionResponse response = connector.getDocumentById(id);
 		validateSuccessResponse(response);
-		return response.getCmisConnectorObject().getDocument();
+		return response.getCmisConnectorDocument().getDocument();
 	}
 
 	private void validateSuccessResponse(CmisConnectorDocumentTransactionResponse response) {
 		assertTrue(response.getResult() == CmisConnectorOperationResult.SUCCESS);
-		assertNotNull(response.getCmisConnectorObject());
+		assertNotNull(response.getCmisConnectorDocument());
 	}
 
 	private void validateDocumentDeletion(String id) {
 		CmisConnectorDocumentTransactionResponse response = connector.getDocumentById(id);
 		assertTrue(response.getResult() == CmisConnectorOperationResult.ERROR);
-		assertNull(response.getCmisConnectorObject().getDocument());
+		assertNull(response.getCmisConnectorDocument().getDocument());
 	}
 
 	private void testDelete(String id, boolean allVersions) {
