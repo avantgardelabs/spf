@@ -214,6 +214,11 @@ public class CmisConnectorImpl implements CmisConnector {
 		return response.build();
 	}
 
+	private void handleException(CmisConnectorDocumentTransactionResponseBuilder response, Exception e) {
+		LOGGER.error("An exception was caught! message=" + e.getMessage());
+		response.setException(e);
+	}
+
 	public CmisConnectorDocumentTransactionResponse createDocument(String fileName, InputStream fileContent, String mimeType, String folderId, Map<String, ?> properties) {
 		LOGGER.debug("Creating document with the next info: [ fileName=" + fileName + ", mimeType=" + mimeType + ", folderId=" + folderId + ", fileContent=" + fileContent + ", properties=" + properties + " ]");
 		CmisConnectorDocumentTransactionResponseBuilder response = new CmisConnectorDocumentTransactionResponseBuilder();
@@ -227,19 +232,5 @@ public class CmisConnectorImpl implements CmisConnector {
 			handleException(response, e);
 		}
 		return response.build();
-	}
-
-	public CmisObject getCmisObjectById(String id) {
-		LOGGER.debug("Getting cmis object with id = " + id);
-		return session.getObject(id);
-	}
-
-	private void handleException(CmisConnectorDocumentTransactionResponseBuilder response, Exception e) {
-		LOGGER.error("An exception was caught! message=" + e.getMessage());
-		response.setException(e);
-	}
-
-	public Session getSession() {
-		return session;
 	}
 }

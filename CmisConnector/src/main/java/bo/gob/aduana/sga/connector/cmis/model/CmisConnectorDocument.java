@@ -2,11 +2,11 @@ package bo.gob.aduana.sga.connector.cmis.model;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 
-public class CmisConnectorObject {
+public class CmisConnectorDocument {
 	private String hashCode;
 	private Document document;
 
-	public CmisConnectorObject(String docHashCode, Document document) {
+	public CmisConnectorDocument(String docHashCode, Document document) {
 		super();
 		this.hashCode = docHashCode;
 		this.document = document;

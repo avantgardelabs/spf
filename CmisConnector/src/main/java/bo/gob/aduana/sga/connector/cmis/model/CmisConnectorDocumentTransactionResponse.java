@@ -1,23 +1,23 @@
 package bo.gob.aduana.sga.connector.cmis.model;
 
 public class CmisConnectorDocumentTransactionResponse {
-	private CmisConnectorObject cmisConnectorObject;
+	private CmisConnectorDocument cmisConnectorDocument;
 	private Exception exception;
 	private CmisConnectorOperationResult result;
 
-	public CmisConnectorDocumentTransactionResponse(CmisConnectorObject document, Exception exception, CmisConnectorOperationResult result) {
+	public CmisConnectorDocumentTransactionResponse(CmisConnectorDocument document, Exception exception, CmisConnectorOperationResult result) {
 		super();
-		this.cmisConnectorObject = document;
+		this.cmisConnectorDocument = document;
 		this.exception = exception;
 		this.result = result;
 	}
 
-	public CmisConnectorObject getCmisConnectorObject() {
-		return cmisConnectorObject;
+	public CmisConnectorDocument getCmisConnectorDocument() {
+		return cmisConnectorDocument;
 	}
 
-	public void setCmisConnectorObject(CmisConnectorObject cmisConnectorObject) {
-		this.cmisConnectorObject = cmisConnectorObject;
+	public void setCmisConnectorDocument(CmisConnectorDocument cmisConnectorDocument) {
+		this.cmisConnectorDocument = cmisConnectorDocument;
 	}
 
 	public CmisConnectorOperationResult getResult() {
