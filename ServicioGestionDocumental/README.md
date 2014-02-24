@@ -69,7 +69,6 @@ Esta compuesto por cuatro módulos bien definidos: DocumentManagerService, Docum
 
 ###4.2.1 DocumentManagerService
 Es el core del servicio: contiene la interface principal encargada de la comunicación entre el servicio Rest y el CmisConnector. Para su implementación se pueden utilizar una serie de helpers incluidos en este mismo módulo.
-TODO agregar especificación de los métodos
 
 <span id="422"/></span>
 
@@ -126,7 +125,7 @@ Para compilar correctamente el servicio debemos primero instalar localmente usan
 ####5.2.3 Instalación
 Luego de finalizar la compilación, entrar dentro de DocumentManagerRestService y editar las siguientes propiedades del archivo pom.xml:
 
-<project>
+	<project>
 	...
 	<properties>
 		<cmis.username>USUARIO DEL GESTOR DOCUMENTAL CMIS</cmis.username>
@@ -138,7 +137,7 @@ Luego de finalizar la compilación, entrar dentro de DocumentManagerRestService 
 		...	
 	</properties>
 	...
-</project>
+	</project>
 
 El repoId y la URL del servicio AtomPub debe proveerla el Gestor Documental que se este utilizando. En el caso de Alfresco 4.2.0 se podrán por ejemplo obtener esos datos desde la siguiente ruta: http://HOST:PORT/alfresco/service/cmis/index.html
 
@@ -186,49 +185,113 @@ Para ejecutar el servicio bastaria con ejecutar correctamente el JBoss donde est
 <span id="61"/></span>
 
 ###6.1 Métodos expuestos
-Todos los métodos están expuestos a partir de "http://HOST:PORT/DocumentManagerRestService/rest", por lo tanto a continuación se nombrará sólo el sufijo correspondiente a cada método.
+Todos los métodos están expuestos a partir de "http://HOST:PORT/DocumentManagerRestService/rest".
 
 <span id="611"/></span>
 
 ####6.1.1 Update
 Punto de vista funcional: modifica el contenido de un documento almacenado en el gestor documental a una versión posterior. Recibe como parámetro de tipo form-data el documento (File), el ID correspondiente al documento a modificar del servicio CMIS (String), el comentario de commit (String) y un boolean indicando si la modificación merece una version mayor o una menor (si se pasa de 1.0 a 2.0 por ejemplo o a 1.1).
 Punto de vista técnico:
-	-	Tipo de método POST, expuesto en "/update". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/update"
-	-	Parámetros de tipo form-data (key/type):
-		-	document / File
-		-	cmisId / String
-		-	commitComment / String
-		-	major / boolean
-	-	Respuesta en formato JSon con la siguiente estructura:
+-	Tipo de método POST, expuesto en "/update". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/rest/update"
+-	Parámetros de tipo form-data (key/type):
+	-	document / File
+	-	cmisId / String
+	-	commitComment / String
+	-	major / boolean
+-	Respuesta en formato JSon con la siguiente estructura:
+	- SUCCESS:
+				{ "success": "true",
+					"data":{
+						"name": "example.doc",
+						"cmisId": "12314-2345awef-23fa-aerg3",
+						"version": "1.1"
+						"versionsHistory":{"1.0","1.1"}				
+						"md5Hash": "hash in md5 algorithm like iweugh234sdfwfSf2893y239hw!"
+						"content": "content in bytes"
+						"properties": "list of CMIS properties of the document"
+					}
+				}
+	- ERROR:
+				{ "success": "false",
+					"data": "exception message"
+				}
 
 <span id="612"/></span>
 
 ####6.1.2 Upload
 Punto de vista funcional: carga un nuevo documento al gestor documental comenzando en la versión 1.0. Recibe como parámetro de tipo form-data el documento (File) y el ID correspondiente al folder donde se subirá (String).
 Punto de vista técnico:
-	-	Tipo de método POST, expuesto en "/upload". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/upload"
-	-	Parámetros de tipo form-data (key/type):
-		-	document / File
-		-	folderid / String
-	-	Respuesta en formato JSon con la siguiente estructura:
-	
+-	Tipo de método POST, expuesto en "/upload". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/rest/upload"
+-	Parámetros de tipo form-data (key/type):
+	-	document / File
+	-	folderid / String
+-	Respuesta en formato JSon con la siguiente estructura:
+	- SUCCESS:
+				{ "success": "true",
+					"data":{
+						"name": "example.doc",
+						"cmisId": "12314-2345awef-23fa-aerg3",
+						"version": "1.1"
+						"versionsHistory":{"1.0","1.1"}				
+						"md5Hash": "hash in md5 algorithm like iweugh234sdfwfSf2893y239hw!"
+						"content": "content in bytes"
+						"properties": "list of CMIS properties of the document"
+					}
+				}
+	- ERROR:
+				{ "success": "false",
+					"data": "exception message"
+				}
+
 <span id="613"/></span>
 
 ####6.1.3 Get
 Punto de vista funcional: recupera un documento del gestor documental. Recibe como parámetro el ID correspondiente al documento del servicio CMIS y, opcional, la versión ya que por defecto retorna la última.
 Punto de vista técnico:
-	-	Tipo de método GET expuesto en "/get". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/get?cmisId=${cmisId}&version=${version}"
-	-	Respuesta en formato JSon con la siguiente estructura:
+-	Tipo de método GET expuesto en "/get". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/rest/get?cmisId=${cmisId}&version=${version}"
+-	Respuesta en formato JSon con la siguiente estructura:
+	- SUCCESS:
+				{ "success": "true",
+					"data":{
+						"name": "example.doc",
+						"cmisId": "12314-2345awef-23fa-aerg3",
+						"version": "1.1"
+						"versionsHistory":{"1.0","1.1"}				
+						"md5Hash": "hash in md5 algorithm like iweugh234sdfwfSf2893y239hw!"
+						"content": "content in bytes"
+						"properties": "list of CMIS properties of the document"
+					}
+				}
+	- ERROR:
+				{ "success": "false",
+					"data": "exception message"
+				}
 
 <span id="614"/></span>
 
 ####6.1.4 Delete
 Punto de vista funcional: elimina un documento del gestor documental. Recibe como parámetro el ID correspondiente al documento del servicio CMIS y, opcional, un booleano allVersions indicando si se debe eliminar todas las versiones ya que por defecto elimina sólo la última.
 Punto de vista técnico:
-	-	Tipo de método GET expuesto en "/delete". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/delete?cmisId=${cmisId}&allVersions=${version}"
-	-	Respuesta en formato JSon con la siguiente estructura:
+-	Tipo de método GET expuesto en "/delete". Por lo que la url final sería "http://HOST:PORT/DocumentManagerRestService-${VERSION}/rest/delete?cmisId=${cmisId}&allVersions=${version}"
+-	Respuesta en formato JSon con la siguiente estructura:
+	- SUCCESS:
+				{ "success": "true",
+					"data":{
+						"name": "example.doc",
+						"cmisId": "12314-2345awef-23fa-aerg3",
+						"version": "1.1"
+						"versionsHistory":{"1.0","1.1"}				
+						"md5Hash": "hash in md5 algorithm like iweugh234sdfwfSf2893y239hw!"
+						"content": "content in bytes"
+						"properties": "list of CMIS properties of the document"
+					}
+				}
+	- ERROR:
+				{ "success": "false",
+					"data": "exception message"
+				}
 
 <span id="7"/></span>
 
 ##7. Mantenimiento
-La idea del 
+	TODO
