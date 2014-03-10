@@ -1,4 +1,4 @@
-package bo.gob.aduana.sga.connector.cmis.service.rest.model;
+package bo.gob.aduana.sga.connector.cmis.service.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
