@@ -8,7 +8,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
+	<properties>
+		<maven.spring.version>3.2.5.RELEASE</maven.spring.version>
+	</properties>
+
 	<dependencies>
+		<!--used for File copy utils -> refactor this -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${maven.spring.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>bo.gob.aduana.sga.connector.cmis</groupId>
 			<artifactId>CmisConnector</artifactId>

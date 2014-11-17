@@ -16,9 +16,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import bo.gob.aduana.sga.connector.cmis.model.CmisConnectorDocument;
 import bo.gob.aduana.sga.connector.cmis.service.DocumentManagerService;
+import bo.gob.aduana.sga.connector.cmis.service.model.DocumentManagerServiceDocument;
 import bo.gob.aduana.sga.connector.cmis.service.model.DocumentManagerServiceParamsHelper;
 import bo.gob.aduana.sga.connector.cmis.service.model.DocumentManagerServiceResponse;
-import bo.gob.aduana.sga.connector.cmis.service.rest.model.DocumentManagerServiceDocument;
 
 /**
  * Document Manager Rest Service controller. Exposes the Document Manager
